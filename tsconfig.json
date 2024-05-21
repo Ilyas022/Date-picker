@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "lib": [
+      "DOM",
+      "ESNext",
+      "DOM.Iterable"
+    ],
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true ,
+    "resolveJsonModule": true,
+    // "baseUrl": "./src",
+    //     "paths": {
+    //       "components/*": ["components/*"],
+    //       "constants/*": ["constants/*"],
+    //       "hooks/*": ["hooks/*"],
+    //       "utils/*": ["utils/*"],
+    //       "assets/*": ["assets/*"],
+    //       "store/*": ["store/*"],
+    //       "types/*": ["types/*"],
+    //       "src/*": ["*"],
+    //     },
+    // "types": ["node"],
+  },
+  
+  "include": ["src/**/*", "src/types/declarations.d.ts"],
+  "exclude": ["node_modules", "dist"],
+}
+

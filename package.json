@@ -1,0 +1,36 @@
+{
+  "name": "date-picker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Ilyas022/date-picker.git",
+  "author": "Ilyas022 <ilya.shchetko@mail.ru>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "rollup -c",
+    "build:dev": "cross-env NODE_ENV=development npm run build",
+    "build:prod": "cross-env NODE_ENV=production npm run build",
+    "build:watch": "rollup -c --bundleConfig --watch"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/react": "^18.3.2",
+    "@types/styled-components": "^5.1.34",
+    "cross-env": "^7.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "rimraf": "^5.0.7",
+    "rollup": "^4.17.2",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "styled-components": "^6.1.11",
+    "typescript": "^5.4.5"
+  }
+}

@@ -1,11 +1,7 @@
-import { CalendarItem } from "./styled"
-
+import { CalendarItem } from './styled'
 
 function Calendar() {
-	
-	return (
-		<CalendarItem />
-	)
+	return <CalendarItem />
 }
 
 export default Calendar

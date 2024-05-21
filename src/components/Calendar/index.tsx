@@ -8,9 +8,7 @@ function Calendar({ text }: { text: string }) {
 	return (
 		<CalendarItem>
 			{text}
-			{/* <img src={Icon} alt="" /> */}
 			<Icon />
-			{/* <IconItem /> */}
 		</CalendarItem>
 	)
 }

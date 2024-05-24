@@ -9,13 +9,13 @@ import terser from '@rollup/plugin-terser'
 import typescript from '@rollup/plugin-typescript'
 import svgr from '@svgr/rollup'
 import peerDepsExternal from 'rollup-plugin-peer-deps-external'
+import postcss from 'rollup-plugin-postcss'
 
 const isDev = process.env.NODE_ENV === 'development'
-// const filename = fileURLToPath(import.meta.url)
-// const dirname = path.dirname(filename)
 
 const customResolver = resolve({
 	extensions: ['.mjs', '.js', '.jsx', '.json', '.sass', '.scss'],
+	browser: true,
 })
 
 export default [
@@ -46,20 +46,21 @@ export default [
 				configFile: './.babelrc',
 				babelHelpers: 'runtime',
 				exclude: 'node_modules/**',
+				plugins: ['babel-plugin-styled-components'],
 			}),
 			eslint({
 				exclude: 'node_modules/**',
 			}),
 			svgr(),
+			postcss({
+				getExportNamed: false,
+				extract: 'styles.css',
+			}),
 			alias({
-				// applicationRoot: path.resolve(`${__dirname}/src`),
-				entries: [
-					{ find: 'src', replacement: path.resolve(__dirname, 'src') },
-					// { find: '@', replacement: path.resolve(dirname, 'src') },
-					// { find: /^@src\/(.*)/, replacement: 'src/$1' },
-				],
+				entries: [{ find: 'src', replacement: path.resolve(__dirname, 'src') }],
 				resolve: customResolver,
 			}),
 		],
+		external: ['react', 'react-dom', 'styled-components'],
 	},
 ]

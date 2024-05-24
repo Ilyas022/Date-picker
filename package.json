@@ -11,7 +11,7 @@
     "build": "rollup -c --bundleConfigAsCjs",
     "build:dev": "cross-env NODE_ENV=development npm run build",
     "build:prod": "cross-env NODE_ENV=production npm run build",
-    "build:watch": "rollup -c --watch",
+    "build:watch": "rollup -c --bundleConfigAsCjs --watch",
     "lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
@@ -19,7 +19,8 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-dom": "*"
+    "react-dom": "*",
+    "styled-components": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.24.5",
@@ -54,6 +55,7 @@
     "@types/styled-components": "^5.1.34",
     "@typescript-eslint/eslint-plugin": "^7.10.0",
     "@typescript-eslint/parser": "^7.10.0",
+    "babel-plugin-styled-components": "^2.1.4",
     "cross-env": "^7.0.3",
     "eslint": "8.57.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -74,6 +76,7 @@
     "rimraf": "^5.0.7",
     "rollup": "^4.17.2",
     "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
     "storybook": "^8.1.1",
     "styled-components": "^6.1.11",
     "tsconfig-paths-webpack-plugin": "^4.1.0",

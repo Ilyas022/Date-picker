@@ -1,11 +1,24 @@
 import React, { useEffect, useState } from 'react'
 
-import { getDateFromInputValue, getInputValueFromDate } from 'utils/getDays'
+import { getDateFromInputValue, getInputValueFromDate, isInRange } from 'utils/getDays'
 
-import { CalendarIcon, CrossIcon, Input, InputItem } from './styled'
+import { CalendarIcon, CalendarIconWrapper, CrossIcon, Input, InputItem } from './styled'
 
-function DateInput({ value, onChange }: { value: Date; onChange: (date: Date) => void }) {
+function DateInput({
+	value,
+	onChange,
+	openCalendar,
+	min,
+	max,
+}: {
+	value: Date
+	onChange: (date: Date) => void
+	openCalendar: () => void
+	min?: Date
+	max?: Date
+}) {
 	const [inputValue, setInputValue] = useState('')
+	const [error, setError] = useState(false)
 
 	useEffect(() => {
 		setInputValue(getInputValueFromDate(value))
@@ -18,6 +31,14 @@ function DateInput({ value, onChange }: { value: Date; onChange: (date: Date) =>
 			return
 		}
 
+		const isDateInRange = isInRange(date, min, max)
+
+		if (!isDateInRange) {
+			setError(true)
+			return
+		}
+
+		setError(false)
 		onChange(date)
 	}
 
@@ -34,8 +55,10 @@ function DateInput({ value, onChange }: { value: Date; onChange: (date: Date) =>
 	}
 
 	return (
-		<InputItem>
-			<CalendarIcon />
+		<InputItem $error={error}>
+			<CalendarIconWrapper onClick={openCalendar}>
+				<CalendarIcon />
+			</CalendarIconWrapper>
 			<Input
 				onKeyDown={onKeyDown}
 				value={inputValue}

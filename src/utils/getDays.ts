@@ -1,3 +1,59 @@
+function isBiggerThanDate(value: Date, date: Date) {
+	if (value.getFullYear() > date.getFullYear()) {
+		return true
+	}
+
+	if (value.getFullYear() < date.getFullYear()) {
+		return false
+	}
+
+	if (value.getMonth() > date.getMonth()) {
+		return true
+	}
+
+	if (value.getMonth() < date.getMonth()) {
+		return false
+	}
+
+	return value.getDate() >= date.getDate()
+}
+
+function isSmallerThanDate(value: Date, date: Date) {
+	if (value.getFullYear() > date.getFullYear()) {
+		return false
+	}
+
+	if (value.getFullYear() < date.getFullYear()) {
+		return true
+	}
+
+	if (value.getMonth() > date.getMonth()) {
+		return false
+	}
+
+	if (value.getMonth() < date.getMonth()) {
+		return true
+	}
+
+	return value.getDate() <= date.getDate()
+}
+
+export function isInRange(value: Date, min?: Date, max?: Date) {
+	if (min && max) {
+		return isSmallerThanDate(value, max) && isBiggerThanDate(value, min)
+	}
+
+	if (min) {
+		return isBiggerThanDate(value, min)
+	}
+
+	if (max) {
+		return isSmallerThanDate(value, max)
+	}
+
+	return true
+}
+
 function isHoliday(date: Date) {
 	const holidays = [
 		new Date(2024, 0, 1), // Новый год

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import LeftArrowIcon from 'assets/LeftArrowIcon'
 import RightArrowIcon from 'assets/RightArrowIcon'
-import { generateCalendar, isToday } from 'utils/getDays'
+import { generateCalendar, isInRange, isToday } from 'utils/getDays'
 
 import { weekDays } from './config'
 import {
@@ -18,7 +18,13 @@ import {
 } from './styled'
 import { ChangeTypes, DaysArray } from './types'
 
-function CalendarItem({ date, setDate }: { date: Date; setDate: (currDate: Date) => void }) {
+function CalendarItem(props: {
+	date: Date
+	min?: Date
+	max?: Date
+	setDate: (currDate: Date) => void
+}) {
+	const { date, setDate, max, min } = props
 	const [calendar, setCalendar] = useState<Date>(date)
 
 	useEffect(() => {
@@ -61,18 +67,27 @@ function CalendarItem({ date, setDate }: { date: Date; setDate: (currDate: Date)
 					))}
 				</WeekDays>
 				<DaysGrid>
-					{days.map(({ day, month, year, isCurrentMonth, isHoliday }) => (
-						<Day
-							key={`${day}/${month}/${year}`}
-							type="button"
-							$isCurrentMonth={isCurrentMonth}
-							$isHoliday={isHoliday}
-							$isToday={isToday(date, new Date(year, month, day))}
-							onClick={() => handleDataChange(day, month, year)}
-						>
-							{day}
-						</Day>
-					))}
+					{days.map(({ day, month, year, isCurrentMonth, isHoliday }) => {
+						const isDateInRange = isInRange(new Date(year, month, day), min, max)
+
+						return (
+							<Day
+								key={`${day}/${month}/${year}`}
+								type="button"
+								$isCurrentMonth={isCurrentMonth}
+								$isHoliday={isHoliday}
+								$isToday={isToday(date, new Date(year, month, day))}
+								$notInRange={!isDateInRange}
+								onClick={() => {
+									if (isDateInRange) {
+										handleDataChange(day, month, year)
+									}
+								}}
+							>
+								{day}
+							</Day>
+						)
+					})}
 				</DaysGrid>
 			</CalendarContainer>
 		</Calendar>

@@ -56,6 +56,7 @@ export const Day = styled.button<{
 	$isCurrentMonth: boolean
 	$isHoliday: boolean
 	$isToday: boolean
+	$notInRange: boolean
 }>`
 	width: ${(props) => getSizes(props, 1)};
 	height: ${(props) => getSizes(props, 1)};
@@ -70,6 +71,13 @@ export const Day = styled.button<{
 
 	&:hover {
 		background-color: ${(props) => getColors(props).primary};
+
+		${({ $notInRange }) =>
+			$notInRange &&
+			css`
+				background-color: ${(props) => getColors(props).holiday};
+				cursor: not-allowed;
+			`}
 	}
 
 	${({ $isToday }) =>

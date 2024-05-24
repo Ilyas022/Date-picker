@@ -4,6 +4,8 @@ import CalendarItem from 'components/CalendarItem'
 import DateInput from 'components/DateInput'
 import useOnClickOutside from 'src/hooks/useOnClickOutside'
 
+import { Container, Label, SubTitle, Title, Toggler } from './styled'
+
 function Item({
 	title,
 	date,
@@ -18,15 +20,24 @@ function Item({
 	setDate: (currDate: Date) => void
 }) {
 	const [isCalendarOpened, setCalendarOpened] = useState(false)
+	const [showWeekends, setShowWeekends] = useState(true)
 
 	const ref = useRef<null | HTMLDivElement>(null)
 	useOnClickOutside(ref, () => {
 		setCalendarOpened(false)
 	})
 
+	const handleWeekendsChange = () => {
+		setShowWeekends((prev) => !prev)
+	}
+
 	return (
-		<div ref={ref}>
-			<h1>{title}</h1>
+		<Container ref={ref}>
+			<Title>{title}</Title>
+			<Label>
+				<SubTitle>Show weekends</SubTitle>
+				<Toggler type="checkbox" checked={showWeekends} onChange={handleWeekendsChange} />
+			</Label>
 			<DateInput
 				value={date}
 				onChange={setDate}
@@ -34,8 +45,16 @@ function Item({
 				min={min}
 				max={max}
 			/>
-			{isCalendarOpened && <CalendarItem date={date} setDate={setDate} min={min} max={max} />}
-		</div>
+			{isCalendarOpened && (
+				<CalendarItem
+					date={date}
+					setDate={setDate}
+					min={min}
+					max={max}
+					showWeekends={showWeekends}
+				/>
+			)}
+		</Container>
 	)
 }
 

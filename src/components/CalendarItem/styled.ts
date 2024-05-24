@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components'
 
 import {
+	getBorders,
 	getBordersRadii,
 	getColors,
 	getFontWeights,
@@ -11,11 +12,11 @@ import {
 export const Calendar = styled.div``
 
 export const CalendarContainer = styled.div`
-	width: 250px;
-	height: 241px;
+	width: ${(props) => getSizes(props, 8, -5)};
+	height: ${(props) => getSizes(props, 8, -14)};
 	border-radius: 8px;
-	border: 1px solid #e1e1e1;
-	padding: 10px;
+	border: ${(props) => getBorders(props, 0)} solid #e1e1e1;
+	padding: ${(props) => getIndents(props, 1, 2)};
 `
 export const Header = styled.div`
 	display: flex;
@@ -46,10 +47,12 @@ export const Month = styled.button`
 	}
 `
 
-export const DaysGrid = styled.div`
+export const DaysGrid = styled.div<{ $showWeekends: boolean }>`
 	display: grid;
-	grid-template-columns: repeat(7, 1fr);
+	grid-template-columns: ${({ $showWeekends }) =>
+		$showWeekends ? 'repeat(7, 1fr)' : 'repeat(5, 1fr)'};
 	grid-template-rows: repeat(5, 1fr);
+	justify-items: center;
 `
 
 export const Day = styled.button<{
@@ -101,7 +104,6 @@ export const WeekDays = styled.div`
 
 export const WeekDay = styled.p`
 	flex: 1 0 auto;
-	padding: 0 ${(props) => getIndents(props, 0, -1)} 0 0;
 	margin: 0;
 	text-align: center;
 	width: ${(props) => getSizes(props, 1)};

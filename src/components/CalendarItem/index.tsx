@@ -23,8 +23,9 @@ function CalendarItem(props: {
 	min?: Date
 	max?: Date
 	setDate: (currDate: Date) => void
+	showWeekends: boolean
 }) {
-	const { date, setDate, max, min } = props
+	const { date, setDate, max, min, showWeekends } = props
 	const [calendar, setCalendar] = useState<Date>(date)
 
 	useEffect(() => {
@@ -32,8 +33,8 @@ function CalendarItem(props: {
 	}, [date])
 
 	const days: DaysArray = useMemo(() => {
-		return generateCalendar(calendar)
-	}, [calendar])
+		return generateCalendar(calendar, showWeekends)
+	}, [calendar, showWeekends])
 
 	const currentMonth = calendar.toLocaleDateString('en', { month: 'long' })
 	const currentYear = calendar.getFullYear()
@@ -49,6 +50,13 @@ function CalendarItem(props: {
 		setDate(new Date(year, month, day))
 	}
 
+	const data = useMemo(() => {
+		if (showWeekends) {
+			return weekDays
+		}
+		return weekDays.slice(0, 5)
+	}, [showWeekends])
+
 	return (
 		<Calendar>
 			<CalendarContainer>
@@ -62,11 +70,11 @@ function CalendarItem(props: {
 					</ArrowIcon>
 				</Header>
 				<WeekDays>
-					{weekDays.map((day) => (
+					{data.map((day) => (
 						<WeekDay key={day}>{day}</WeekDay>
 					))}
 				</WeekDays>
-				<DaysGrid>
+				<DaysGrid $showWeekends={showWeekends}>
 					{days.map(({ day, month, year, isCurrentMonth, isHoliday }) => {
 						const isDateInRange = isInRange(new Date(year, month, day), min, max)
 

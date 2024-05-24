@@ -170,14 +170,21 @@ export const getNextMonthDays = (year: number, month: number) => {
 	return dateCells
 }
 
-export function generateCalendar(startDate: Date) {
-	const year = startDate.getFullYear()
-	const month = startDate.getMonth()
-	const numberOfDays = getDaysAmountInAMonth(year, month)
-	const prevMonth = getPreviousMonthDays(year, month)
+export function generateCalendar(startDate: Date, showWeekends: boolean) {
+	const dateYear = startDate.getFullYear()
+	const dateMonth = startDate.getMonth()
+	const numberOfDays = getDaysAmountInAMonth(dateYear, dateMonth)
+	const prevMonth = getPreviousMonthDays(dateYear, dateMonth)
 	const currenMonth = getCurrentMothDays(startDate, numberOfDays)
-	const nextMonth = getNextMonthDays(year, month)
+	const nextMonth = getNextMonthDays(dateYear, dateMonth)
 	const calendar = [...prevMonth, ...currenMonth, ...nextMonth]
+
+	if (!showWeekends) {
+		return calendar.filter(({ day, month, year }) => {
+			const dayOfWeek = new Date(year, month, day).getDay()
+			return dayOfWeek !== 0 && dayOfWeek !== 6 // Исключаем воскресенье (0) и субботу (6)
+		})
+	}
 
 	return calendar
 }

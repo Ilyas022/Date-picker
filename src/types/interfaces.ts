@@ -21,3 +21,10 @@ export interface Theme {
 	borders: number[]
 	bordersRadii: number[]
 }
+
+export enum WeekStartDay {
+	monday = 6,
+	sunday = 0,
+}
+
+export type FirstDayOfWeekType = WeekStartDay.monday | WeekStartDay.sunday

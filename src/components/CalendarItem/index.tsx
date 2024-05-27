@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import LeftArrowIcon from 'assets/LeftArrowIcon'
 import RightArrowIcon from 'assets/RightArrowIcon'
 import CalendarData from 'components/CelndarData'
+import { FirstDayOfWeekType } from 'types/interfaces'
 import {
 	generateCalendarDays,
 	generateCalendarMonths,
@@ -10,7 +11,7 @@ import {
 	isInRange,
 } from 'utils/getDays'
 
-import { weekDays } from './config'
+import { weekDaysFromMonday, weekDaysFromSunday } from './config'
 import {
 	ArrowIcon,
 	Calendar,
@@ -25,6 +26,7 @@ import { ChangeTypes, DaysArray } from './types'
 
 function CalendarItem(props: {
 	date: Date
+	firstDayOfWeek: FirstDayOfWeekType
 	min?: Date
 	max?: Date
 	setDate: (currDate: Date) => void
@@ -32,20 +34,19 @@ function CalendarItem(props: {
 	showWeekends: boolean
 	view: 'years' | 'months' | 'days'
 }) {
-	const { date, setDate, max, min, showWeekends, view, setView } = props
+	const { date, setDate, max, min, showWeekends, view, setView, firstDayOfWeek } = props
 	const [calendar, setCalendar] = useState<Date>(date)
 
 	useEffect(() => {
 		setCalendar(date)
 	}, [date])
 
-	const days: DaysArray | undefined = useMemo(() => {
+	const days: DaysArray | null = useMemo(() => {
 		if (view === 'days') {
-			return generateCalendarDays(calendar, showWeekends)
+			return generateCalendarDays(calendar, showWeekends, firstDayOfWeek)
 		}
-
-		return undefined
-	}, [calendar, showWeekends, view])
+		return null
+	}, [calendar, showWeekends, view, firstDayOfWeek])
 
 	const months = useMemo(() => {
 		if (view === 'months') {
@@ -104,6 +105,9 @@ function CalendarItem(props: {
 		if (view === 'months') {
 			setView('years')
 		}
+		if (view === 'years') {
+			setView('days')
+		}
 	}
 
 	const handleDataChange = (currDate: Date) => {
@@ -118,11 +122,12 @@ function CalendarItem(props: {
 	}
 
 	const data = useMemo(() => {
+		const week = firstDayOfWeek ? weekDaysFromMonday : weekDaysFromSunday
 		if (showWeekends) {
-			return weekDays
+			return week
 		}
-		return weekDays.slice(0, 5)
-	}, [showWeekends])
+		return weekDaysFromMonday.slice(0, 5)
+	}, [showWeekends, firstDayOfWeek])
 
 	return (
 		<Calendar>

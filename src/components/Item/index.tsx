@@ -3,8 +3,9 @@ import React, { useRef, useState } from 'react'
 import CalendarItem from 'components/CalendarItem'
 import DateInput from 'components/DateInput'
 import useOnClickOutside from 'src/hooks/useOnClickOutside'
+import { FirstDayOfWeekType } from 'types/interfaces'
 
-import { Container, Label, SubTitle, Title, Toggler } from './styled'
+import { Container, Label, SubTitle, Title, Toggler, TogglerContainer } from './styled'
 
 function Item({
 	title,
@@ -21,6 +22,7 @@ function Item({
 }) {
 	const [isCalendarOpened, setCalendarOpened] = useState(false)
 	const [showWeekends, setShowWeekends] = useState(true)
+	const [firstDayOfWeek, setFirstDayOfWeek] = useState<FirstDayOfWeekType>(6)
 	const [calendarView, setCalendarView] = useState<'years' | 'months' | 'days'>('days')
 
 	const ref = useRef<null | HTMLDivElement>(null)
@@ -32,15 +34,31 @@ function Item({
 	const handleWeekendsChange = () => {
 		setShowWeekends((prev) => !prev)
 	}
+	const handleFirstDayOfWeekChange = () => {
+		if (firstDayOfWeek === 6) {
+			return setFirstDayOfWeek(0)
+		}
+		return setFirstDayOfWeek(6)
+	}
 
 	return (
 		<Container ref={ref}>
 			<Title>{title}</Title>
 			{calendarView === 'days' && (
-				<Label>
-					<SubTitle>Show weekends</SubTitle>
-					<Toggler type="checkbox" checked={showWeekends} onChange={handleWeekendsChange} />
-				</Label>
+				<TogglerContainer>
+					<Label>
+						<SubTitle>Show weekends</SubTitle>
+						<Toggler type="checkbox" checked={showWeekends} onChange={handleWeekendsChange} />
+					</Label>
+					<Label>
+						<SubTitle>First day of week: {firstDayOfWeek === 6 ? 'Monday' : 'Sunday'}</SubTitle>
+						<Toggler
+							type="checkbox"
+							checked={firstDayOfWeek === 6}
+							onChange={handleFirstDayOfWeekChange}
+						/>
+					</Label>
+				</TogglerContainer>
 			)}
 
 			<DateInput
@@ -52,6 +70,7 @@ function Item({
 			/>
 			{isCalendarOpened && (
 				<CalendarItem
+					firstDayOfWeek={firstDayOfWeek}
 					date={date}
 					setDate={setDate}
 					min={min}

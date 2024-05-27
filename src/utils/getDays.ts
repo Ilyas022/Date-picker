@@ -1,3 +1,5 @@
+import { FirstDayOfWeekType, WeekStartDay } from 'types/interfaces'
+
 function isBiggerThanDate(value: Date, date: Date) {
 	if (value.getFullYear() > date.getFullYear()) {
 		return true
@@ -83,7 +85,7 @@ export const isToday = (today: Date, date: Date) => {
 		today.getFullYear() === date.getFullYear()
 	)
 }
-const SundayToSaturdayWeek: Record<number, number> = {
+const MondayToSundayWeek: Record<number, number> = {
 	0: 6,
 	1: 0,
 	2: 1,
@@ -92,13 +94,25 @@ const SundayToSaturdayWeek: Record<number, number> = {
 	5: 4,
 	6: 5,
 }
+const SundayToSaturdayWeek: Record<number, number> = {
+	0: 0,
+	1: 1,
+	2: 2,
+	3: 3,
+	4: 4,
+	5: 5,
+	6: 6,
+}
 
 export const isCurrentMonth = (today: Date, date: Date) => {
 	return today.getMonth() === date.getMonth() && today.getFullYear() === date.getFullYear()
 }
 
-const getDayOfTheWeek = (date: Date) => {
+const getDayOfTheWeek = (date: Date, firstDay: 0 | 6) => {
 	const day = date.getDay()
+	if (firstDay === WeekStartDay.monday) {
+		return MondayToSundayWeek[day]
+	}
 	return SundayToSaturdayWeek[day]
 }
 
@@ -107,9 +121,9 @@ export const getDaysAmountInAMonth = (year: number, month: number) => {
 	return nextMonthDate.getDate()
 }
 
-export const getPreviousMonthDays = (year: number, month: number) => {
+export const getPreviousMonthDays = (year: number, month: number, firstDay: FirstDayOfWeekType) => {
 	const currentMonthFirstDay = new Date(year, month, 1)
-	const prevMonthDaysAmount = getDayOfTheWeek(currentMonthFirstDay)
+	const prevMonthDaysAmount = getDayOfTheWeek(currentMonthFirstDay, firstDay)
 	const daysAmountInPrevMonth = getDaysAmountInAMonth(year, month - 1)
 	const prevMonthDays = []
 	const [dateYear, dateMonth] = month === 0 ? [year - 1, 11] : [year, month - 1]
@@ -135,9 +149,9 @@ export const getCurrentMothDays = (date: Date, numberOfDays: number) => {
 	return dateCells
 }
 
-export const getNextMonthDays = (year: number, month: number) => {
+export const getNextMonthDays = (year: number, month: number, firstDay: FirstDayOfWeekType) => {
 	const currentMonthFirstDay = new Date(year, month, 1)
-	const prevMonthCellsAmount = getDayOfTheWeek(currentMonthFirstDay)
+	const prevMonthCellsAmount = getDayOfTheWeek(currentMonthFirstDay, firstDay)
 
 	const daysAmount = getDaysAmountInAMonth(year, month)
 
@@ -155,13 +169,17 @@ export const getNextMonthDays = (year: number, month: number) => {
 	return dateCells
 }
 
-export function generateCalendarDays(startDate: Date, showWeekends: boolean) {
+export function generateCalendarDays(
+	startDate: Date,
+	showWeekends: boolean,
+	firstDay: FirstDayOfWeekType
+) {
 	const dateYear = startDate.getFullYear()
 	const dateMonth = startDate.getMonth()
 	const numberOfDays = getDaysAmountInAMonth(dateYear, dateMonth)
-	const prevMonth = getPreviousMonthDays(dateYear, dateMonth)
+	const prevMonth = getPreviousMonthDays(dateYear, dateMonth, firstDay)
 	const currenMonth = getCurrentMothDays(startDate, numberOfDays)
-	const nextMonth = getNextMonthDays(dateYear, dateMonth)
+	const nextMonth = getNextMonthDays(dateYear, dateMonth, firstDay)
 	const calendar = [...prevMonth, ...currenMonth, ...nextMonth]
 
 	if (!showWeekends) {

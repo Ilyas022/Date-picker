@@ -21,10 +21,12 @@ function Item({
 }) {
 	const [isCalendarOpened, setCalendarOpened] = useState(false)
 	const [showWeekends, setShowWeekends] = useState(true)
+	const [calendarView, setCalendarView] = useState<'years' | 'months' | 'days'>('days')
 
 	const ref = useRef<null | HTMLDivElement>(null)
 	useOnClickOutside(ref, () => {
 		setCalendarOpened(false)
+		setCalendarView('days')
 	})
 
 	const handleWeekendsChange = () => {
@@ -34,10 +36,13 @@ function Item({
 	return (
 		<Container ref={ref}>
 			<Title>{title}</Title>
-			<Label>
-				<SubTitle>Show weekends</SubTitle>
-				<Toggler type="checkbox" checked={showWeekends} onChange={handleWeekendsChange} />
-			</Label>
+			{calendarView === 'days' && (
+				<Label>
+					<SubTitle>Show weekends</SubTitle>
+					<Toggler type="checkbox" checked={showWeekends} onChange={handleWeekendsChange} />
+				</Label>
+			)}
+
 			<DateInput
 				value={date}
 				onChange={setDate}
@@ -52,6 +57,8 @@ function Item({
 					min={min}
 					max={max}
 					showWeekends={showWeekends}
+					view={calendarView}
+					setView={setCalendarView}
 				/>
 			)}
 		</Container>

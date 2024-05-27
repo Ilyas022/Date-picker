@@ -22,6 +22,7 @@ export const Header = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
+	margin-bottom: 10px;
 `
 
 export const ArrowIcon = styled.button`
@@ -41,17 +42,26 @@ export const ArrowIcon = styled.button`
 	}
 `
 
-export const Month = styled.button`
+export const DateItem = styled.button`
 	&:hover {
 		cursor: pointer;
 	}
 `
 
-export const DaysGrid = styled.div<{ $showWeekends: boolean }>`
+export const DaysGrid = styled.div<{ $showWeekends: boolean; $threeCols: boolean }>`
 	display: grid;
 	grid-template-columns: ${({ $showWeekends }) =>
 		$showWeekends ? 'repeat(7, 1fr)' : 'repeat(5, 1fr)'};
 	grid-template-rows: repeat(5, 1fr);
+
+	${({ $threeCols }) =>
+		$threeCols &&
+		css`
+			grid-template-columns: repeat(3, 1fr);
+			gap: 10px;
+			padding: 10px;
+			font-size: 14px;
+		`}
 	justify-items: center;
 `
 
@@ -107,4 +117,26 @@ export const WeekDay = styled.p`
 	margin: 0;
 	text-align: center;
 	width: ${(props) => getSizes(props, 1)};
+`
+
+export const MonthOrYear = styled.button<{
+	$notInRange: boolean
+}>`
+	padding: 5px;
+	cursor: pointer;
+	border-radius: ${(props) => getBordersRadii(props, 2)};
+	transition: background-color 0.3s;
+
+	&:hover {
+		background-color: ${(props) => getColors(props).primary};
+	}
+
+	&:hover {
+		${({ $notInRange }) =>
+			$notInRange &&
+			css`
+				background-color: ${(props) => getColors(props).holiday};
+				cursor: not-allowed;
+			`}
+	}
 `

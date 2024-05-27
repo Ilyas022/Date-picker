@@ -2,17 +2,22 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import LeftArrowIcon from 'assets/LeftArrowIcon'
 import RightArrowIcon from 'assets/RightArrowIcon'
-import { generateCalendar, isInRange, isToday } from 'utils/getDays'
+import CalendarData from 'components/CelndarData'
+import {
+	generateCalendarDays,
+	generateCalendarMonths,
+	generateCalendarYears,
+	isInRange,
+} from 'utils/getDays'
 
 import { weekDays } from './config'
 import {
 	ArrowIcon,
 	Calendar,
 	CalendarContainer,
-	Day,
 	DaysGrid,
 	Header,
-	Month,
+	DateItem,
 	WeekDay,
 	WeekDays,
 } from './styled'
@@ -23,31 +28,93 @@ function CalendarItem(props: {
 	min?: Date
 	max?: Date
 	setDate: (currDate: Date) => void
+	setView: (view: 'years' | 'months' | 'days') => void
 	showWeekends: boolean
+	view: 'years' | 'months' | 'days'
 }) {
-	const { date, setDate, max, min, showWeekends } = props
+	const { date, setDate, max, min, showWeekends, view, setView } = props
 	const [calendar, setCalendar] = useState<Date>(date)
 
 	useEffect(() => {
 		setCalendar(date)
 	}, [date])
 
-	const days: DaysArray = useMemo(() => {
-		return generateCalendar(calendar, showWeekends)
-	}, [calendar, showWeekends])
+	const days: DaysArray | undefined = useMemo(() => {
+		if (view === 'days') {
+			return generateCalendarDays(calendar, showWeekends)
+		}
 
-	const currentMonth = calendar.toLocaleDateString('en', { month: 'long' })
-	const currentYear = calendar.getFullYear()
+		return undefined
+	}, [calendar, showWeekends, view])
+
+	const months = useMemo(() => {
+		if (view === 'months') {
+			return generateCalendarMonths(date)
+		}
+		return null
+	}, [calendar, view])
+
+	const years = useMemo(() => {
+		if (view === 'years') {
+			return generateCalendarYears(calendar)
+		}
+		return null
+	}, [calendar, view])
+
+	const getDateToShow = () => {
+		if (view === 'years') {
+			return 'Years'
+		}
+		if (view === 'months') {
+			return calendar.getFullYear()
+		}
+		if (view === 'days') {
+			const currentMonth = calendar.toLocaleDateString('en', { month: 'long' })
+			const currentYear = calendar.getFullYear()
+			return `${currentMonth} ${currentYear}`
+		}
+
+		return undefined
+	}
+
+	const dateToShow = getDateToShow()
 
 	const handleChangeMonth = (type: keyof typeof ChangeTypes) => {
+		const dayMultiplier = 15
 		const number = type === 'dec' ? -1 : 1
+
 		const newDate = new Date(calendar)
-		newDate.setMonth(calendar.getMonth() + number)
+		if (view === 'days') {
+			newDate.setMonth(calendar.getMonth() + number)
+		}
+		if (view === 'months') {
+			newDate.setFullYear(calendar.getFullYear() + number)
+		}
+		if (view === 'years') {
+			newDate.setFullYear(calendar.getFullYear() + number * dayMultiplier)
+		}
+
 		setCalendar(newDate)
 	}
 
-	const handleDataChange = (day: number, month: number, year: number) => {
-		setDate(new Date(year, month, day))
+	const handleChangeView = () => {
+		if (view === 'days') {
+			setView('months')
+		}
+		if (view === 'months') {
+			setView('years')
+		}
+	}
+
+	const handleDataChange = (currDate: Date) => {
+		setDate(currDate)
+	}
+
+	const handleYearOrMonthClick = (currDate: Date) => {
+		if (isInRange(currDate, min, max)) {
+			setDate(currDate)
+			setView('days')
+		}
 	}
 
 	const data = useMemo(() => {
@@ -64,38 +131,52 @@ function CalendarItem(props: {
 					<ArrowIcon onClick={() => handleChangeMonth(ChangeTypes.dec)}>
 						<LeftArrowIcon />
 					</ArrowIcon>
-					<Month>{`${currentMonth} ${currentYear}`}</Month>
+					<DateItem onClick={handleChangeView}>{dateToShow}</DateItem>
 					<ArrowIcon onClick={() => handleChangeMonth(ChangeTypes.inc)}>
 						<RightArrowIcon />
 					</ArrowIcon>
 				</Header>
-				<WeekDays>
-					{data.map((day) => (
-						<WeekDay key={day}>{day}</WeekDay>
-					))}
-				</WeekDays>
-				<DaysGrid $showWeekends={showWeekends}>
-					{days.map(({ day, month, year, isCurrentMonth, isHoliday }) => {
-						const isDateInRange = isInRange(new Date(year, month, day), min, max)
-
-						return (
-							<Day
-								key={`${day}/${month}/${year}`}
-								type="button"
-								$isCurrentMonth={isCurrentMonth}
-								$isHoliday={isHoliday}
-								$isToday={isToday(date, new Date(year, month, day))}
-								$notInRange={!isDateInRange}
-								onClick={() => {
-									if (isDateInRange) {
-										handleDataChange(day, month, year)
-									}
-								}}
-							>
-								{day}
-							</Day>
-						)
-					})}
+				{view === 'days' && (
+					<WeekDays>
+						{data.map((day) => (
+							<WeekDay key={day}>{day}</WeekDay>
+						))}
+					</WeekDays>
+				)}
+				<DaysGrid $showWeekends={showWeekends} $threeCols={view !== 'days'}>
+					{days && view === 'days' && (
+						<CalendarData
+							calendar={calendar}
+							data={days}
+							date={date}
+							max={max}
+							min={min}
+							view={view}
+							handleDayClick={(currDate) => handleDataChange(currDate)}
+						/>
+					)}
+					{months && view === 'months' && (
+						<CalendarData
+							calendar={calendar}
+							data={months}
+							date={date}
+							max={max}
+							min={min}
+							view={view}
+							handleYearOrMonthClick={(currDate) => handleYearOrMonthClick(currDate)}
+						/>
+					)}
+					{years && view === 'years' && (
+						<CalendarData
+							calendar={calendar}
+							data={years}
+							date={date}
+							max={max}
+							min={min}
+							view={view}
+							handleYearOrMonthClick={(currDate) => handleYearOrMonthClick(currDate)}
+						/>
+					)}
 				</DaysGrid>
 			</CalendarContainer>
 		</Calendar>

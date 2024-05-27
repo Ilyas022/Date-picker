@@ -54,7 +54,7 @@ export function isInRange(value: Date, min?: Date, max?: Date) {
 	return true
 }
 
-function isHoliday(date: Date) {
+export const isHoliday = (date: Date) => {
 	const holidays = [
 		new Date(2024, 0, 1), // Новый год
 		new Date(2024, 0, 2), // Новый год
@@ -93,6 +93,10 @@ const SundayToSaturdayWeek: Record<number, number> = {
 	6: 5,
 }
 
+export const isCurrentMonth = (today: Date, date: Date) => {
+	return today.getMonth() === date.getMonth() && today.getFullYear() === date.getFullYear()
+}
+
 const getDayOfTheWeek = (date: Date) => {
 	const day = date.getDay()
 	return SundayToSaturdayWeek[day]
@@ -111,14 +115,8 @@ export const getPreviousMonthDays = (year: number, month: number) => {
 	const [dateYear, dateMonth] = month === 0 ? [year - 1, 11] : [year, month - 1]
 
 	for (let i = prevMonthDaysAmount - 1; i >= 0; i--) {
-		prevMonthDays.push({
-			year: dateYear,
-			month: dateMonth,
-			day: daysAmountInPrevMonth - i,
-			isToday: false,
-			isCurrentMonth: false,
-			isHoliday: isHoliday(new Date(dateYear, dateMonth, daysAmountInPrevMonth - i)),
-		})
+		const currentDate = new Date(dateYear, dateMonth, daysAmountInPrevMonth - i)
+		prevMonthDays.push(currentDate)
 	}
 
 	return prevMonthDays
@@ -130,14 +128,8 @@ export const getCurrentMothDays = (date: Date, numberOfDays: number) => {
 	const dateCells = []
 
 	for (let i = 1; i <= numberOfDays; i++) {
-		dateCells.push({
-			year,
-			month,
-			day: i,
-			isToday: isToday(date, new Date(year, month, i)),
-			isCurrentMonth: true,
-			isHoliday: isHoliday(new Date(year, month, i)),
-		})
+		const currentDate = new Date(year, month, i)
+		dateCells.push(currentDate)
 	}
 
 	return dateCells
@@ -156,21 +148,14 @@ export const getNextMonthDays = (year: number, month: number) => {
 	const dateCells = []
 
 	for (let i = 1; i <= nextMonthDays; i++) {
-		dateCells.push({
-			year: dateYear,
-			month: dateMonth,
-			day: i,
-
-			isToday: false,
-			isCurrentMonth: false,
-			isHoliday: isHoliday(new Date(dateYear, dateMonth, i)),
-		})
+		const currentDate = new Date(dateYear, dateMonth, i)
+		dateCells.push(currentDate)
 	}
 
 	return dateCells
 }
 
-export function generateCalendar(startDate: Date, showWeekends: boolean) {
+export function generateCalendarDays(startDate: Date, showWeekends: boolean) {
 	const dateYear = startDate.getFullYear()
 	const dateMonth = startDate.getMonth()
 	const numberOfDays = getDaysAmountInAMonth(dateYear, dateMonth)
@@ -180,8 +165,8 @@ export function generateCalendar(startDate: Date, showWeekends: boolean) {
 	const calendar = [...prevMonth, ...currenMonth, ...nextMonth]
 
 	if (!showWeekends) {
-		return calendar.filter(({ day, month, year }) => {
-			const dayOfWeek = new Date(year, month, day).getDay()
+		return calendar.filter((date: Date) => {
+			const dayOfWeek = date.getDay()
 			return dayOfWeek !== 0 && dayOfWeek !== 6 // Исключаем воскресенье (0) и субботу (6)
 		})
 	}
@@ -189,10 +174,44 @@ export function generateCalendar(startDate: Date, showWeekends: boolean) {
 	return calendar
 }
 
-const validValueRegex = /^\d{2}\/\d{2}\/\d{4}$/
+export const generateCalendarMonths = (date: Date) => {
+	const monthsArray = []
+	const day = date.getDate()
+	const year = date.getFullYear()
+
+	for (let i = 0; i < 12; i++) {
+		monthsArray.push(new Date(year, i, day))
+	}
+	return monthsArray
+}
+
+export const generateCalendarYears = (date: Date) => {
+	const day = date.getDate()
+	const month = date.getMonth()
+	const year = date.getFullYear()
+
+	const halfSize = 7
+	const yearsArray = []
+
+	for (let i = halfSize; i > 0; i--) {
+		const currentDate = new Date(year - i, month, day)
+		yearsArray.push(currentDate)
+	}
+
+	yearsArray.push(new Date(year, month, day))
+
+	for (let i = 1; i <= halfSize; i++) {
+		const currentDate = new Date(year + i, month, day)
+		yearsArray.push(currentDate)
+	}
+
+	return yearsArray
+}
+
+const validRegex = /^\d{2}\/\d{2}\/\d{4}$/
 
 export const isValidDateString = (value: string) => {
-	if (!validValueRegex.test(value)) {
+	if (!validRegex.test(value)) {
 		return false
 	}
 	const [date, month, year] = value.split('/').map((v) => parseInt(v, 10))

@@ -8,6 +8,9 @@ interface ThemeColors {
 	border: string
 	colorText: string
 	inActive: string
+	shadow: string
+	popUpBg: string
+	white: string
 }
 
 export interface Theme {

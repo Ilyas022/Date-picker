@@ -31,6 +31,9 @@ export const colors = {
 	border: '#ddd',
 	inActive: '#aaa',
 	colorText: '#000',
+	shadow: '0px 0px 13px -7px rgba(0, 0, 0, 0.75)',
+	popUpBg: '#000000b8',
+	white: '#fff',
 }
 
 export const theme: Theme = {

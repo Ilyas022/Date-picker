@@ -5,6 +5,7 @@ import {
 	getBordersRadii,
 	getColors,
 	getFontWeights,
+	getFonts,
 	getIndents,
 	getSizes,
 } from 'utils/themeGetters'
@@ -71,6 +72,7 @@ export const Day = styled.button<{
 	$isToday: boolean
 	$notInRange: boolean
 }>`
+	position: relative;
 	width: ${(props) => getSizes(props, 1)};
 	height: ${(props) => getSizes(props, 1)};
 	padding: 0;
@@ -106,6 +108,15 @@ export const Day = styled.button<{
 		`}
 `
 
+export const DayDate = styled.p``
+
+export const DayBadge = styled.span`
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: ${(props) => getFonts(props, 0, -4)};
+`
+
 export const WeekDays = styled.div`
 	display: flex;
 	font-weight: ${(props) => getFontWeights(props, 3)};
@@ -122,7 +133,7 @@ export const WeekDay = styled.p`
 export const MonthOrYear = styled.button<{
 	$notInRange: boolean
 }>`
-	padding: 5px;
+	padding: ${(props) => getIndents(props, 0, 1)};
 	cursor: pointer;
 	border-radius: ${(props) => getBordersRadii(props, 2)};
 	transition: background-color 0.3s;

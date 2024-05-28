@@ -1,7 +1,8 @@
 import React from 'react'
 
-import { Day, MonthOrYear } from 'components/CalendarItem/styled'
-import { isCurrentMonth, isHoliday, isInRange, isToday } from 'utils/getDays'
+import { MonthOrYear } from 'components/CalendarItem/styled'
+import DateItem from 'components/DateItem'
+import { isInRange } from 'utils/getDays'
 
 interface BaseType {
 	calendar: Date
@@ -43,29 +44,16 @@ function CalendarData({
 		<>
 			{view === 'days' &&
 				data.map((currentDate) => {
-					const day = currentDate.getDate()
-					const month = currentDate.getMonth()
-					const year = currentDate.getFullYear()
-					const isTodayHoliday = isHoliday(currentDate)
-					const isNowCurrentMonth = isCurrentMonth(currentDate, calendar)
-					const isDateInRange = isInRange(currentDate, min, max)
-
 					return (
-						<Day
-							key={`${day}/${month}/${year}`}
-							type="button"
-							$isCurrentMonth={isNowCurrentMonth}
-							$isHoliday={isTodayHoliday}
-							$isToday={isToday(date, currentDate)}
-							$notInRange={!isDateInRange}
-							onClick={() => {
-								if (isDateInRange) {
-									handleDayClick(currentDate)
-								}
-							}}
-						>
-							{day}
-						</Day>
+						<DateItem
+							key={`${currentDate}`}
+							currentDate={currentDate}
+							calendar={calendar}
+							min={min}
+							max={max}
+							date={date}
+							handleClick={handleDayClick}
+						/>
 					)
 				})}
 			{view === 'months' &&

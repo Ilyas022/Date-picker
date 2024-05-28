@@ -62,11 +62,13 @@ class MessageDecorator implements TaskStorageInterface {
 	}
 
 	setTask(date: string, message: string): void {
+		// eslint-disable-next-line
 		console.log(`[MessageStorage] Set Message: Date "${date}", Message "${message}"`)
 		this.storage.setTask(date, message)
 	}
 
 	deleteTask(date: string, message: string): void {
+		// eslint-disable-next-line
 		console.log(`[MessageStorage] Delete Message: Date "${date}", Message "${message}"`)
 		this.storage.deleteTask(date, message)
 	}

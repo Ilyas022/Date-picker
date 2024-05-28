@@ -3,8 +3,6 @@ export interface DayProps {
 	calendar: Date
 	min?: Date
 	max?: Date
-	from: Date
-	to: Date | undefined
 	date: Date
 	handleClick: (date: Date) => void
 }

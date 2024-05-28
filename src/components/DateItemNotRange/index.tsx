@@ -8,7 +8,7 @@ import TaskStorage from 'utils/TaskStorage'
 
 import { BadgeType, DayProps } from './types'
 
-function DateItem({ currentDate, calendar, max, min, from, to, date, handleClick }: DayProps) {
+function DateItemNotRange({ currentDate, calendar, max, min, date, handleClick }: DayProps) {
 	const [openPopUp, setOpenPopUp] = useState(false)
 	const [taskText, setTaskText] = useState('')
 	const [tasks, setTasks] = useState(() => TaskStorage.getTask(currentDate.toISOString()))
@@ -49,13 +49,6 @@ function DateItem({ currentDate, calendar, max, min, from, to, date, handleClick
 	const isTodayHoliday = isHoliday(currentDate)
 	const isNowCurrentMonth = isCurrentMonth(currentDate, calendar)
 	const isDateInRange = isInRange(currentDate, min, max)
-	let isDateInCalendarRange = false
-
-	if (from && to) {
-		isDateInCalendarRange = isInRange(currentDate, from, to)
-	}
-	const isFirstDayOfRange = currentDate.toISOString() === from.toISOString()
-	const isLastDayOfRange = currentDate.toISOString() === to?.toISOString()
 
 	const click = useSingleAndDoubleClick(
 		() => {
@@ -72,10 +65,7 @@ function DateItem({ currentDate, calendar, max, min, from, to, date, handleClick
 				$isCurrentMonth={isNowCurrentMonth}
 				$isHoliday={isTodayHoliday}
 				$isToday={isToday(date, currentDate)}
-				$isDateInCalendarRange={isDateInCalendarRange}
 				$notInRange={!isDateInRange}
-				$isFirstDayOfRange={isFirstDayOfRange}
-				$isLastDayOfRange={isLastDayOfRange}
 				onClick={click}
 			>
 				<DayDate>{day}</DayDate>
@@ -96,4 +86,4 @@ function DateItem({ currentDate, calendar, max, min, from, to, date, handleClick
 	)
 }
 
-export default DateItem
+export default DateItemNotRange

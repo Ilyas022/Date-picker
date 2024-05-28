@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-import CalendarData from 'components/CelndarData'
 import Header from 'components/Header'
 import { weekDaysFromMonday, weekDaysFromSunday } from 'constants/calendarConstants'
-import { ChangeTypes, FirstDayOfWeekType, RangeTypes } from 'types/calendarTypes'
+import { ChangeTypes, FirstDayOfWeekType } from 'types/calendarTypes'
 import {
 	generateCalendarDays,
 	generateCalendarMonths,
@@ -13,38 +12,20 @@ import {
 } from 'utils/getDays'
 
 import { Calendar, CalendarContainer, DaysGrid, WeekDay, WeekDays } from './styled'
+import CalendarData from '../CalendarDataNotRange'
 
-function CalendarItem(props: {
+function CalendarItemNotRange(props: {
 	date: Date
 	firstDayOfWeek: FirstDayOfWeekType
 	min?: Date
 	max?: Date
-	from: Date
-	to?: Date
-	typeOfRange: 0 | 1
 	setDate: (currDate: Date) => void
-	setFrom: (currDate: Date) => void
-	setTo: (currDate: Date) => void
 	setView: (view: 'years' | 'months' | 'days') => void
 	showWeekends: boolean
 	view: 'years' | 'months' | 'days'
 }) {
-	const {
-		date,
-		setFrom,
-		setTo,
-		max,
-		min,
-		from,
-		to,
-		showWeekends,
-		view,
-		typeOfRange,
-		setView,
-		firstDayOfWeek,
-	} = props
+	const { date, setDate, max, min, showWeekends, view, setView, firstDayOfWeek } = props
 	const [calendar, setCalendar] = useState<Date>(date)
-	const [rangeType, setRangeType] = useState<0 | 1>(RangeTypes.from)
 
 	useEffect(() => {
 		setCalendar(date)
@@ -58,7 +39,7 @@ function CalendarItem(props: {
 			return generateCalendarMonths(date)
 		}
 		return generateCalendarYears(calendar)
-	}, [calendar, showWeekends, view, firstDayOfWeek, from, to])
+	}, [calendar, showWeekends, view, firstDayOfWeek])
 
 	const dateToShow = getDateToShow(calendar, view)
 
@@ -93,27 +74,12 @@ function CalendarItem(props: {
 	}
 
 	const handleDataChange = (currDate: Date) => {
-		if (rangeType === RangeTypes.from) {
-			setFrom(currDate)
-			setRangeType(RangeTypes.to)
-		} else {
-			if (currDate < from) {
-				setTo(from)
-				setFrom(currDate)
-			} else {
-				setTo(currDate)
-			}
-			setRangeType(RangeTypes.from)
-		}
+		setDate(currDate)
 	}
 
 	const handleYearOrMonthClick = (currDate: Date) => {
 		if (isInRange(currDate, min, max)) {
-			if (typeOfRange === RangeTypes.from) {
-				setFrom(currDate)
-			} else {
-				setTo(currDate)
-			}
+			setDate(currDate)
 			setView('days')
 		}
 	}
@@ -132,8 +98,6 @@ function CalendarItem(props: {
 		date,
 		max,
 		min,
-		from,
-		to,
 		view,
 		handleDayClick: handleDataChange,
 		handleYearOrMonthClick,
@@ -165,4 +129,4 @@ function CalendarItem(props: {
 	)
 }
 
-export default CalendarItem
+export default CalendarItemNotRange

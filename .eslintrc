@@ -65,6 +65,8 @@
     "react-hooks/exhaustive-deps": "off",
     "no-plusplus":"off",
     "no-shadow": "off",
-    "@typescript-eslint/no-shadow": "error"
+    "@typescript-eslint/no-shadow": "error",
+    "consistent-return": "off",
+    "no-nested-ternary":"off"
   }
 }

@@ -1,25 +1,22 @@
 import React, { useRef, useState } from 'react'
 
-import CalendarItem from 'components/CalendarItem'
 import DateInput from 'components/DateInput'
 import useOnClickOutside from 'src/hooks/useOnClickOutside'
-import { FirstDayOfWeekType } from 'types/interfaces'
+import { FirstDayOfWeekType } from 'types/calendarTypes'
 
-import { Container, Label, SubTitle, Title, Toggler, TogglerContainer } from './styled'
+import { Label, SubTitle, Toggler, TogglerContainer } from './styled'
+import CalendarItem from '../CalendarItemNotRange'
+import { Container, Title } from '../RangeItem/styled'
 
-function Item({
-	title,
-	date,
-	setDate,
-	min,
-	max,
-}: {
+type ItemProps = {
 	title: string
-	date: Date
 	min?: Date
 	max?: Date
+	date: Date
 	setDate: (currDate: Date) => void
-}) {
+}
+
+function NotRangeCalendarItem({ title, date, setDate, min, max }: ItemProps) {
 	const [isCalendarOpened, setCalendarOpened] = useState(false)
 	const [showWeekends, setShowWeekends] = useState(true)
 	const [firstDayOfWeek, setFirstDayOfWeek] = useState<FirstDayOfWeekType>(6)
@@ -84,4 +81,4 @@ function Item({
 	)
 }
 
-export default Item
+export default NotRangeCalendarItem

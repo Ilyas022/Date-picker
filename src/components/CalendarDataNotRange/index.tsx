@@ -1,36 +1,25 @@
 import React from 'react'
 
 import { MonthOrYear } from 'components/CalendarItem/styled'
-import DateItem from 'components/DateItem'
 import { isInRange } from 'utils/getDays'
 
 import { CalendarDataProps } from './types'
+import DateItemNotRange from '../DateItemNotRange'
 
-function CalendarData({
-	calendar,
-	data,
-	date,
-	max,
-	from,
-	to,
-	min,
-	view,
-	handleDayClick,
-	handleYearOrMonthClick,
-}: CalendarDataProps) {
+function CalendarDataNotRange(props: CalendarDataProps) {
+	const { calendar, data, date, max, min, view, handleDayClick, handleYearOrMonthClick } = props
+
 	return (
 		<>
 			{view === 'days' &&
 				data.map((currentDate) => {
 					return (
-						<DateItem
+						<DateItemNotRange
 							key={`${currentDate}`}
 							currentDate={currentDate}
 							calendar={calendar}
 							min={min}
 							max={max}
-							from={from}
-							to={to}
 							date={date}
 							handleClick={handleDayClick}
 						/>
@@ -67,4 +56,4 @@ function CalendarData({
 	)
 }
 
-export default CalendarData
+export default CalendarDataNotRange

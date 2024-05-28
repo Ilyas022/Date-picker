@@ -1,4 +1,4 @@
-import { FirstDayOfWeekType, WeekStartDay } from 'types/interfaces'
+import { FirstDayOfWeekType, WeekStartDay } from 'types/calendarTypes'
 
 function isBiggerThanDate(value: Date, date: Date) {
 	if (value.getFullYear() > date.getFullYear()) {
@@ -273,4 +273,20 @@ export const getDateFromInputValue = (inputValue: string) => {
 	const dateObj = new Date(year, month - 1, date)
 	// eslint-disable-next-line consistent-return
 	return dateObj
+}
+
+export const getDateToShow = (date: Date, view: 'years' | 'months' | 'days') => {
+	if (view === 'years') {
+		return 'Years'
+	}
+	if (view === 'months') {
+		return date.getFullYear()
+	}
+	if (view === 'days') {
+		const currentMonth = date.toLocaleDateString('en', { month: 'long' })
+		const currentYear = date.getFullYear()
+		return `${currentMonth} ${currentYear}`
+	}
+
+	return undefined
 }

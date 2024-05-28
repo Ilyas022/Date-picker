@@ -14,6 +14,7 @@ export const Calendar = styled.div``
 
 export const CalendarContainer = styled.div`
 	width: ${(props) => getSizes(props, 8, -5)};
+	/* height: ${(props) => getSizes(props, 8, -14)}; */
 	border-radius: 8px;
 	border: ${(props) => getBorders(props, 0)} solid #e1e1e1;
 	padding: ${(props) => getIndents(props, 1, 2)};
@@ -60,9 +61,7 @@ export const Day = styled.button<{
 	$isHoliday: boolean
 	$isToday: boolean
 	$notInRange: boolean
-	$isFirstDayOfRange: boolean
-	$isLastDayOfRange: boolean
-	$isDateInCalendarRange?: boolean
+	$isDateInCalendarRange: boolean
 }>`
 	position: relative;
 	width: ${(props) => getSizes(props, 1)};
@@ -96,19 +95,8 @@ export const Day = styled.button<{
 	${({ $isDateInCalendarRange }) =>
 		$isDateInCalendarRange &&
 		css`
-			background-color: ${(props) => getColors(props).range};
+			background-color: lightblue;
 		`} 
-
-		${({ $isFirstDayOfRange }) =>
-		$isFirstDayOfRange &&
-		css`
-			background-color: ${(props) => getColors(props).rangeStart};
-		`}
-		${({ $isLastDayOfRange }) =>
-		$isLastDayOfRange &&
-		css`
-			background-color: ${(props) => getColors(props).primary};
-		`}
 		${({ $isToday }) =>
 		$isToday &&
 		css`

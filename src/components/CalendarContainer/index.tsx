@@ -5,11 +5,13 @@ import '../../styles/index.css'
 
 import CalendarItem from 'components/CalendarItem'
 import DateInput from 'components/DateInput'
+import { ErrorBoundary } from 'components/ErrorBoundary'
 import Togglers from 'components/Togglers'
 import { theme } from 'constants/theme'
 import { GlobalStyles } from 'src/styles/global.styles'
 import { EntityTypes, FirstDayOfWeekType } from 'types/calendarTypes'
 
+import { calendarFallbackMsg, inputFallbackMsg, togglersFallbackMsg } from './config'
 import { Container } from './styled'
 
 function CalendarContainer() {
@@ -50,43 +52,44 @@ function CalendarContainer() {
 		<ThemeProvider theme={theme}>
 			<GlobalStyles />
 			<Container>
-				<div>
-					<p>Date</p>
-					<DateInput value={minDate} onChange={handleSelectMinDate} />
-				</div>
-				<div>
-					<p>Date</p>
-					<DateInput value={maxDate} onChange={handleSelectMaxDate} />
-				</div>
-				<div>
-					<p>From</p>
-					<DateInput value={rangeFrom} onChange={handleSelectRangeFrom} disableClear />
-				</div>
-				<div>
-					<p>To</p>
-					<DateInput value={rangeTo} onChange={handleSelectRangeTo} />
-				</div>
-				{calendarView === EntityTypes.days && (
-					<Togglers
+				<ErrorBoundary fallback={<p>{inputFallbackMsg}</p>}>
+					<DateInput value={minDate} onChange={handleSelectMinDate} title="Date" />
+				</ErrorBoundary>
+				<ErrorBoundary fallback={<p>{inputFallbackMsg}</p>}>
+					<DateInput value={maxDate} onChange={handleSelectMaxDate} title="Date" />
+				</ErrorBoundary>
+				<ErrorBoundary fallback={<p>{inputFallbackMsg}</p>}>
+					<DateInput value={rangeFrom} onChange={handleSelectRangeFrom} disableClear title="From" />
+				</ErrorBoundary>
+				<ErrorBoundary fallback={<p>{inputFallbackMsg}</p>}>
+					<DateInput value={rangeTo} onChange={handleSelectRangeTo} title="To" />
+				</ErrorBoundary>
+
+				<ErrorBoundary fallback={<p>{togglersFallbackMsg}</p>}>
+					{calendarView === EntityTypes.days && (
+						<Togglers
+							firstDayOfWeek={firstDayOfWeek}
+							showWeekends={showWeekends}
+							handleWeekendsChange={handleWeekendsChange}
+							handleFirstDayOfWeekChange={handleFirstDayOfWeekChange}
+						/>
+					)}
+				</ErrorBoundary>
+				<ErrorBoundary fallback={<p>{calendarFallbackMsg}</p>}>
+					<CalendarItem
 						firstDayOfWeek={firstDayOfWeek}
+						date={rangeFrom}
+						setFrom={handleSelectRangeFrom}
+						setTo={handleSelectRangeTo}
+						min={minDate}
+						max={maxDate}
+						from={rangeFrom}
+						to={rangeTo}
 						showWeekends={showWeekends}
-						handleWeekendsChange={handleWeekendsChange}
-						handleFirstDayOfWeekChange={handleFirstDayOfWeekChange}
+						view={calendarView}
+						setView={setCalendarView}
 					/>
-				)}
-				<CalendarItem
-					firstDayOfWeek={firstDayOfWeek}
-					date={rangeFrom}
-					setFrom={handleSelectRangeFrom}
-					setTo={handleSelectRangeTo}
-					min={minDate}
-					max={maxDate}
-					from={rangeFrom}
-					to={rangeTo}
-					showWeekends={showWeekends}
-					view={calendarView}
-					setView={setCalendarView}
-				/>
+				</ErrorBoundary>
 			</Container>
 		</ThemeProvider>
 	)

@@ -27,20 +27,8 @@ function CalendarItem(props: {
 	showWeekends: boolean
 	view: 'years' | 'months' | 'days'
 }) {
-	const {
-		date,
-		setFrom,
-		setTo,
-		max,
-		min,
-		from,
-		to,
-		showWeekends,
-		view,
-		// typeOfRange,
-		setView,
-		firstDayOfWeek,
-	} = props
+	const { date, setFrom, setTo, max, min, from, to, showWeekends, view, setView, firstDayOfWeek } =
+		props
 	const [calendar, setCalendar] = useState<Date>(date)
 	const [rangeType, setRangeType] = useState<0 | 1>(RangeTypes.from)
 

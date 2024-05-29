@@ -4,6 +4,12 @@ import { default as Calendar } from 'assets/CalendarIcon'
 import { default as Cross } from 'assets/CrossIcon'
 import { getBorders, getBordersRadii, getColors, getIndents, getSizes } from 'utils/themeGetters'
 
+export const Container = styled.div``
+
+export const Title = styled.p`
+	margin-bottom: ${(props) => getIndents(props, 1, 2)};
+`
+
 export const InputItem = styled.div<{ $error: boolean }>`
 	display: flex;
 	align-items: center;

@@ -1,5 +1,5 @@
 {
-  "name": "date-picker",
+  "name": "date-picker-is",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "git@github.com:Ilyas022/date-picker.git",
@@ -57,6 +57,7 @@
     "@typescript-eslint/eslint-plugin": "^7.10.0",
     "@typescript-eslint/parser": "^7.10.0",
     "babel-plugin-styled-components": "^2.1.4",
+    "chromatic": "^11.4.1",
     "cross-env": "^7.0.3",
     "eslint": "8.57.0",
     "eslint-config-airbnb": "^19.0.4",

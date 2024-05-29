@@ -15,14 +15,14 @@ export const Calendar = styled.div``
 export const CalendarContainer = styled.div`
 	width: ${(props) => getSizes(props, 8, -5)};
 	border-radius: 8px;
-	border: ${(props) => getBorders(props, 0)} solid #e1e1e1;
-	padding: ${(props) => getIndents(props, 1, 2)};
+	border: ${(props) => getBorders(props, 0)} solid ${(props) => getColors(props).border};
 `
 export const Header = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
 	margin-bottom: 10px;
+	padding: ${(props) => getIndents(props, 1, 2)};
 `
 
 export const ArrowIcon = styled.button`
@@ -53,6 +53,7 @@ export const DaysGrid = styled.div<{ $showWeekends: boolean; $colsNumber: 2 | 3 
 	grid-template-columns: ${({ $colsNumber }) => `repeat(${$colsNumber}, 1fr)`};
 	grid-template-rows: repeat(5, 1fr);
 	justify-items: center;
+	padding: 0 ${(props) => getIndents(props, 1, 2)} ${(props) => getIndents(props, 1, 2)};
 `
 
 export const Day = styled.button<{
@@ -129,6 +130,7 @@ export const WeekDays = styled.div`
 	display: flex;
 	font-weight: ${(props) => getFontWeights(props, 3)};
 	margin-bottom: ${(props) => getIndents(props, 0, 1)};
+	padding: 0 ${(props) => getIndents(props, 1, 2)};
 `
 
 export const WeekDay = styled.p`
@@ -158,4 +160,13 @@ export const MonthOrYear = styled.button<{
 				cursor: not-allowed;
 			`}
 	}
+`
+
+export const ClearBtn = styled.button`
+	display: block;
+	width: 100%;
+	text-align: center;
+	border-top: ${(props) => getBorders(props, 0)} solid ${(props) => getColors(props).border};
+	border-radius: 0 0 ${(props) => getBordersRadii(props, 4)} ${(props) => getBordersRadii(props, 4)};
+	padding: ${(props) => getIndents(props, 1, 2)} 0px;
 `

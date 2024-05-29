@@ -1,4 +1,4 @@
-import { FirstDayOfWeekType, WeekStartDay } from 'types/calendarTypes'
+import { EntityTypes, FirstDayOfWeekType, WeekStartDay } from 'types/calendarTypes'
 
 function isBiggerThanDate(value: Date, date: Date) {
 	if (value.getFullYear() > date.getFullYear()) {
@@ -40,7 +40,8 @@ function isSmallerThanDate(value: Date, date: Date) {
 	return value.getDate() <= date.getDate()
 }
 
-export function isInRange(value: Date, min?: Date, max?: Date) {
+export function isInRange(value: Date | undefined, min?: Date, max?: Date) {
+	if (!value) return false
 	if (min && max) {
 		return isSmallerThanDate(value, max) && isBiggerThanDate(value, min)
 	}
@@ -255,12 +256,15 @@ const addLeadingZeroIfNeeded = (value: number) => {
 	return `0${value}`
 }
 
-export const getInputValueFromDate = (value: Date) => {
-	const date = addLeadingZeroIfNeeded(value.getDate())
-	const month = addLeadingZeroIfNeeded(value.getMonth() + 1)
-	const year = value.getFullYear()
+export const getInputValueFromDate = (value?: Date) => {
+	if (value) {
+		const date = addLeadingZeroIfNeeded(value.getDate())
+		const month = addLeadingZeroIfNeeded(value.getMonth() + 1)
+		const year = value.getFullYear()
 
-	return `${date}/${month}/${year}`
+		return `${date}/${month}/${year}`
+	}
+	return ''
 }
 
 export const getDateFromInputValue = (inputValue: string) => {
@@ -276,13 +280,13 @@ export const getDateFromInputValue = (inputValue: string) => {
 }
 
 export const getDateToShow = (date: Date, view: 'years' | 'months' | 'days') => {
-	if (view === 'years') {
+	if (view === EntityTypes.years) {
 		return 'Years'
 	}
-	if (view === 'months') {
+	if (view === EntityTypes.months) {
 		return date.getFullYear()
 	}
-	if (view === 'days') {
+	if (view === EntityTypes.days) {
 		const currentMonth = date.toLocaleDateString('en', { month: 'long' })
 		const currentYear = date.getFullYear()
 		return `${currentMonth} ${currentYear}`

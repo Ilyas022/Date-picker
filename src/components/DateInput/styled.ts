@@ -35,3 +35,4 @@ export const CalendarIconWrapper = styled.div``
 
 export const CalendarIcon = styled(Calendar)``
 export const CrossIcon = styled(Cross)``
+export const Button = styled.button``

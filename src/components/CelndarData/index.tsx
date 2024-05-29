@@ -2,6 +2,7 @@ import React from 'react'
 
 import { MonthOrYear } from 'components/CalendarItem/styled'
 import DateItem from 'components/DateItem'
+import { EntityTypes } from 'types/calendarTypes'
 import { isInRange } from 'utils/getDays'
 
 import { CalendarDataProps } from './types'
@@ -20,7 +21,7 @@ function CalendarData({
 }: CalendarDataProps) {
 	return (
 		<>
-			{view === 'days' &&
+			{view === EntityTypes.days &&
 				data.map((currentDate) => {
 					return (
 						<DateItem
@@ -36,7 +37,7 @@ function CalendarData({
 						/>
 					)
 				})}
-			{view === 'months' &&
+			{view === EntityTypes.months &&
 				data.map((currentDate) => {
 					const isDateInRange = isInRange(currentDate, min, max)
 					return (
@@ -49,7 +50,7 @@ function CalendarData({
 						</MonthOrYear>
 					)
 				})}
-			{view === 'years' &&
+			{view === EntityTypes.years &&
 				data.map((currentDate) => {
 					const currentYear = currentDate.getFullYear()
 					const isDateInRange = isInRange(currentDate, min, max)

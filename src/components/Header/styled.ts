@@ -7,6 +7,7 @@ export const HeaderItem = styled.div`
 	align-items: center;
 	justify-content: space-around;
 	margin-bottom: ${(props) => getIndents(props, 1, 2)};
+	padding: ${(props) => getIndents(props, 1, 2)} 0;
 `
 
 export const ArrowIcon = styled.button`

@@ -10,8 +10,4 @@ export default meta
 
 type Story = StoryObj<typeof Calendar>
 
-export const Primary: Story = {
-	args: {
-		text: 'My button',
-	},
-}
+export const CalendarDemo: Story = {}

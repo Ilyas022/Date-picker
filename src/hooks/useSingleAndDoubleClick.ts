@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react'
 
+const ClickDebounceDuration = 250
+
 function useSingleAndDoubleClick(actionSimpleClick: () => void, actionDoubleClick: () => void) {
 	const [click, setClick] = useState(0)
-	const Duration = 250
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
-			// simple click
 			if (click === 1) actionSimpleClick()
 			setClick(0)
-		}, Duration)
+		}, ClickDebounceDuration)
 
 		if (click === 2) actionDoubleClick()
 

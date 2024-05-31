@@ -41,7 +41,7 @@ export default [
 				declarationDir: 'dist',
 				sourceMap: isDev,
 			}),
-			isDev && terser(),
+			terser(),
 			babel({
 				configFile: './.babelrc',
 				babelHelpers: 'runtime',

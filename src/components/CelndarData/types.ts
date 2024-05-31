@@ -2,10 +2,10 @@ interface BaseType {
 	calendar: Date
 	date: Date
 	data: Date[]
-	min: Date | undefined
-	max: Date | undefined
-	from: Date
-	to: Date | undefined
+	min?: Date
+	max?: Date
+	from?: Date
+	to?: Date
 }
 
 interface CalendarDataDay extends BaseType {

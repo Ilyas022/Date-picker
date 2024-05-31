@@ -19,10 +19,10 @@ function CalendarData({
 	handleDayClick,
 	handleYearOrMonthClick,
 }: CalendarDataProps) {
-	return (
-		<>
-			{view === EntityTypes.days &&
-				data.map((currentDate) => {
+	if (view === EntityTypes.days) {
+		return (
+			<>
+				{data.map((currentDate) => {
 					return (
 						<DateItem
 							key={`${currentDate}`}
@@ -37,8 +37,14 @@ function CalendarData({
 						/>
 					)
 				})}
-			{view === EntityTypes.months &&
-				data.map((currentDate) => {
+			</>
+		)
+	}
+
+	if (view === EntityTypes.months) {
+		return (
+			<>
+				{data.map((currentDate) => {
 					const isDateInRange = isInRange(currentDate, min, max)
 					return (
 						<MonthOrYear
@@ -50,20 +56,25 @@ function CalendarData({
 						</MonthOrYear>
 					)
 				})}
-			{view === EntityTypes.years &&
-				data.map((currentDate) => {
-					const currentYear = currentDate.getFullYear()
-					const isDateInRange = isInRange(currentDate, min, max)
-					return (
-						<MonthOrYear
-							$notInRange={!isDateInRange}
-							onClick={() => handleYearOrMonthClick(currentDate)}
-							key={currentYear}
-						>
-							{currentYear}
-						</MonthOrYear>
-					)
-				})}
+			</>
+		)
+	}
+
+	return (
+		<>
+			{data.map((currentDate) => {
+				const currentYear = currentDate.getFullYear()
+				const isDateInRange = isInRange(currentDate, min, max)
+				return (
+					<MonthOrYear
+						$notInRange={!isDateInRange}
+						onClick={() => handleYearOrMonthClick(currentDate)}
+						key={currentYear}
+					>
+						{currentYear}
+					</MonthOrYear>
+				)
+			})}
 		</>
 	)
 }

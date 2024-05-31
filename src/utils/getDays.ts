@@ -275,7 +275,6 @@ export const getDateFromInputValue = (inputValue: string) => {
 	const [date, month, year] = inputValue.split('/').map((v) => parseInt(v, 10))
 
 	const dateObj = new Date(year, month - 1, date)
-	// eslint-disable-next-line consistent-return
 	return dateObj
 }
 

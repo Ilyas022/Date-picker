@@ -2,8 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import CalendarData from 'components/CelndarData'
 import Header from 'components/Header'
+import Togglers from 'components/Togglers'
 import { weekDaysFromMonday, weekDaysFromSunday } from 'constants/calendarConstants'
-import { ChangeTypes, EntityTypes, FirstDayOfWeekType, RangeTypes } from 'types/calendarTypes'
+import { ChangeTypes, EntityTypes, FirstDayOfWeekType, ViewTypes } from 'types/calendarTypes'
 import {
 	generateCalendarDays,
 	generateCalendarMonths,
@@ -15,25 +16,26 @@ import {
 import { Calendar, CalendarContainer, ClearBtn, DaysGrid, WeekDay, WeekDays } from './styled'
 
 function CalendarItem(props: {
-	date: Date
-	firstDayOfWeek: FirstDayOfWeekType
+	date?: Date
 	min?: Date
 	max?: Date
-	from: Date
+	from?: Date
 	to?: Date
-	setFrom: (currDate: Date) => void
-	setTo: (currDate: Date | undefined) => void
-	setView: (view: 'years' | 'months' | 'days') => void
-	showWeekends: boolean
-	view: 'years' | 'months' | 'days'
+	setDate: (currDate?: Date) => void
 }) {
-	const { date, setFrom, setTo, max, min, from, to, showWeekends, view, setView, firstDayOfWeek } =
-		props
-	const [calendar, setCalendar] = useState<Date>(date)
-	const [rangeType, setRangeType] = useState<0 | 1>(RangeTypes.from)
+	const today = new Date()
+	const defaultDate = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+
+	const { date = defaultDate, setDate, max, min, from, to } = props
+	const [calendar, setCalendar] = useState(date)
+	const [view, setView] = useState<ViewTypes>('days')
+	const [showWeekends, setShowWeekends] = useState(true)
+	const [firstDayOfWeek, setFirstDayOfWeek] = useState<FirstDayOfWeekType>(6)
 
 	useEffect(() => {
-		setCalendar(date)
+		if (calendar > date || calendar < date) {
+			setCalendar(date)
+		}
 	}, [date])
 
 	const calendarDays: Date[] | null = useMemo(() => {
@@ -79,36 +81,25 @@ function CalendarItem(props: {
 	}
 
 	const handleDataChange = (currDate: Date) => {
-		if (rangeType === RangeTypes.from) {
-			if (to && currDate > to) {
-				return setTo(currDate)
-			}
-			setFrom(currDate)
-			setRangeType(RangeTypes.to)
-		} else if (currDate < from) {
-			setFrom(currDate)
-		} else {
-			setTo(currDate)
-			setRangeType(RangeTypes.from)
-		}
+		setDate(currDate)
 	}
 
 	const handleYearOrMonthClick = (currDate: Date) => {
 		if (isInRange(currDate, min, max)) {
-			if (rangeType === RangeTypes.from) {
-				if (to && currDate > to) {
-					setTo(currDate)
-					setFrom(to)
-				} else {
-					setFrom(currDate)
-					setRangeType(RangeTypes.to)
-				}
-			} else {
-				setTo(currDate)
-				setRangeType(RangeTypes.from)
-			}
+			setDate(currDate)
 			setView(EntityTypes.days)
 		}
+	}
+
+	const handleWeekendsChange = () => {
+		setShowWeekends((prev) => !prev)
+	}
+
+	const handleFirstDayOfWeekChange = () => {
+		if (firstDayOfWeek === 6) {
+			return setFirstDayOfWeek(0)
+		}
+		return setFirstDayOfWeek(6)
 	}
 
 	const data = useMemo(() => {
@@ -134,6 +125,12 @@ function CalendarItem(props: {
 
 	return (
 		<Calendar>
+			<Togglers
+				firstDayOfWeek={firstDayOfWeek}
+				showWeekends={showWeekends}
+				handleWeekendsChange={handleWeekendsChange}
+				handleFirstDayOfWeekChange={handleFirstDayOfWeekChange}
+			/>
 			<CalendarContainer>
 				<Header
 					handleChangeMonth={handleChangeMonth}
@@ -156,7 +153,7 @@ function CalendarItem(props: {
 					{calendarDays && <CalendarData {...propsForCalendar} />}
 				</DaysGrid>
 				{from && to && (
-					<ClearBtn type="button" onClick={() => setTo(undefined)}>
+					<ClearBtn type="button" onClick={() => setDate(undefined)}>
 						Clear
 					</ClearBtn>
 				)}

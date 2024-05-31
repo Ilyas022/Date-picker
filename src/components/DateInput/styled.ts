@@ -4,7 +4,9 @@ import { default as Calendar } from 'assets/CalendarIcon'
 import { default as Cross } from 'assets/CrossIcon'
 import { getBorders, getBordersRadii, getColors, getIndents, getSizes } from 'utils/themeGetters'
 
-export const Container = styled.div``
+export const Container = styled.div`
+	position: relative;
+`
 
 export const Title = styled.p`
 	margin-bottom: ${(props) => getIndents(props, 1, 2)};

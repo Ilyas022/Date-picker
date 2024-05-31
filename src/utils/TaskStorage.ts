@@ -1,5 +1,3 @@
-/* eslint-disable  max-classes-per-file */
-
 interface TaskStorageInterface {
 	getTask(date: string): string[] | null
 	setTask(date: string, message: string): void

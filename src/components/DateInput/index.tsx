@@ -1,5 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { ThemeProvider } from 'styled-components'
 
+import CalendarItem from 'components/CalendarItem'
+import { theme } from 'constants/theme'
+import useOnClickOutside from 'hooks/useOnClickOutside'
+import { GlobalStyles } from 'src/styles/global.styles'
 import { getDateFromInputValue, getInputValueFromDate, isInRange } from 'utils/getDays'
 
 import {
@@ -14,35 +19,45 @@ import {
 } from './styled'
 
 function DateInput({
-	value,
+	date,
 	onChange,
 	min,
 	max,
+	from,
+	to,
 	title,
 	disableClear = false,
 }: {
-	value: Date | undefined
+	date: Date | undefined
 	onChange: (date: Date | undefined) => void
 	min?: Date
 	max?: Date
+	from?: Date
+	to?: Date
 	title: string
 	disableClear?: boolean
 }) {
 	const [inputValue, setInputValue] = useState('')
 	const [error, setError] = useState(false)
+	const [calendarOpen, setCalendarOpen] = useState(false)
 
 	useEffect(() => {
-		setInputValue(getInputValueFromDate(value))
-	}, [value])
+		setInputValue(getInputValueFromDate(date))
+	}, [date])
+
+	const ref = useRef(null)
+	useOnClickOutside(ref, () => {
+		setCalendarOpen(false)
+	})
 
 	const updateValue = () => {
-		const date = getDateFromInputValue(inputValue)
-		if (!date && value) {
-			setInputValue(getInputValueFromDate(value))
+		const dateFromInput = getDateFromInputValue(inputValue)
+		if (!dateFromInput && date) {
+			setInputValue(getInputValueFromDate(date))
 			return
 		}
 
-		const isDateInRange = isInRange(date, min, max)
+		const isDateInRange = isInRange(dateFromInput, min, max)
 
 		if (!isDateInRange) {
 			setError(true)
@@ -50,7 +65,7 @@ function DateInput({
 		}
 
 		setError(false)
-		onChange(date)
+		onChange(dateFromInput)
 	}
 
 	const onKeyDown = (e: React.KeyboardEvent) => {
@@ -62,6 +77,7 @@ function DateInput({
 
 	const onBlur = () => {
 		updateValue()
+		setCalendarOpen(false)
 	}
 
 	const handleClear = () => {
@@ -69,25 +85,41 @@ function DateInput({
 	}
 
 	return (
-		<Container>
-			<Title>{title}</Title>
-			<InputItem $error={error}>
-				<CalendarIconWrapper>
-					<CalendarIcon />
-				</CalendarIconWrapper>
-				<Input
-					onKeyDown={onKeyDown}
-					value={inputValue}
-					onChange={(e) => {
-						setInputValue(e.target.value.trim())
-					}}
-					onBlur={onBlur}
-				/>
-				<Button type="button" disabled={disableClear} onClick={handleClear}>
-					<CrossIcon />
-				</Button>
-			</InputItem>
-		</Container>
+		<ThemeProvider theme={theme}>
+			<GlobalStyles />
+			<Container ref={ref}>
+				<Title>{title}</Title>
+				<InputItem $error={error}>
+					<CalendarIconWrapper onClick={() => setCalendarOpen((prev) => !prev)}>
+						<CalendarIcon />
+					</CalendarIconWrapper>
+					<Input
+						onKeyDown={onKeyDown}
+						value={inputValue}
+						onChange={(e) => {
+							setInputValue(e.target.value.trim())
+						}}
+						onFocus={() => {
+							setCalendarOpen(true)
+						}}
+						onBlur={onBlur}
+					/>
+					<Button type="button" disabled={disableClear} onClick={handleClear}>
+						<CrossIcon />
+					</Button>
+				</InputItem>
+				{calendarOpen && (
+					<CalendarItem
+						date={date}
+						min={min}
+						max={max}
+						from={from}
+						to={to}
+						setDate={(currDate?: Date) => onChange(currDate)}
+					/>
+				)}
+			</Container>
+		</ThemeProvider>
 	)
 }
 

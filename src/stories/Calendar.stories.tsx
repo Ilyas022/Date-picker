@@ -1,0 +1,61 @@
+import React, { useState } from 'react'
+
+import DateInput from 'components/DateInput'
+import { ErrorBoundary } from 'components/ErrorBoundary'
+import { inputFallbackMsg } from 'src/stories/config'
+import { Container } from 'src/stories/styled'
+
+export function CalendarDemo() {
+	const [minDate, setMinDate] = useState<Date | undefined>(new Date(2024, 4, 1))
+	const [maxDate, setMaxDate] = useState<Date | undefined>(new Date(2024, 4, 24))
+	const [rangeFrom, setRangeFrom] = useState<Date | undefined>(new Date(2024, 4, 24))
+	const [rangeTo, setRangeTo] = useState<Date | undefined>(new Date(2024, 4, 24))
+
+	const handleSelectMinDate = (nextDate?: Date) => {
+		setMinDate(nextDate)
+	}
+	const handleSelectMaxDate = (nextDate?: Date) => {
+		setMaxDate(nextDate)
+	}
+	const handleSelectRangeFrom = (nextDate?: Date) => {
+		setRangeFrom(nextDate)
+	}
+	const handleSelectRangeTo = (nextDate?: Date) => {
+		setRangeTo(nextDate)
+	}
+
+	return (
+		<Container>
+			<ErrorBoundary fallback={<p>{inputFallbackMsg}</p>}>
+				<DateInput date={minDate} onChange={handleSelectMinDate} title="Date" />
+			</ErrorBoundary>
+			<ErrorBoundary fallback={<p>{inputFallbackMsg}</p>}>
+				<DateInput date={maxDate} onChange={handleSelectMaxDate} title="Date" />
+			</ErrorBoundary>
+			<ErrorBoundary fallback={<p>{inputFallbackMsg}</p>}>
+				<DateInput
+					date={rangeFrom}
+					onChange={handleSelectRangeFrom}
+					min={minDate}
+					max={maxDate}
+					from={rangeFrom}
+					to={rangeTo}
+					title="From"
+				/>
+			</ErrorBoundary>
+			<ErrorBoundary fallback={<p>{inputFallbackMsg}</p>}>
+				<DateInput
+					date={rangeTo}
+					min={minDate}
+					max={maxDate}
+					from={rangeFrom}
+					to={rangeTo}
+					onChange={handleSelectRangeTo}
+					title="To"
+				/>
+			</ErrorBoundary>
+		</Container>
+	)
+}
+
+export default {}

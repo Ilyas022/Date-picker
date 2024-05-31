@@ -4,7 +4,10 @@ import { default as Calendar } from 'assets/CalendarIcon'
 import { default as Cross } from 'assets/CrossIcon'
 import { getBorders, getBordersRadii, getColors, getIndents, getSizes } from 'utils/themeGetters'
 
-export const Container = styled.div``
+export const Container = styled.div`
+	position: relative;
+	width: ${(props) => getSizes(props, 10, -150)};
+`
 
 export const Title = styled.p`
 	margin-bottom: ${(props) => getIndents(props, 1, 2)};

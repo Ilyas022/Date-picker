@@ -16,6 +16,8 @@ export enum EntityTypes {
 	days = 'days',
 }
 
+export type ViewTypes = 'years' | 'months' | 'days'
+
 export enum RangeTypes {
 	from = 0,
 	to = 1,

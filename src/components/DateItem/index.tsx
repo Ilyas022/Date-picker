@@ -52,9 +52,12 @@ function DateItem({ currentDate, calendar, max, min, from, to, date, handleClick
 	let isDateInCalendarRange = false
 
 	if (from && to) {
-		isDateInCalendarRange = isInRange(currentDate, from, to)
+		const biggestNum = from > to ? from : to
+		const lowestNum = from > to ? to : from
+		isDateInCalendarRange = isInRange(currentDate, lowestNum, biggestNum)
 	}
-	const isFirstDayOfRange = currentDate.toISOString() === from.toISOString()
+
+	const isFirstDayOfRange = currentDate.toISOString() === from?.toISOString()
 	const isLastDayOfRange = currentDate.toISOString() === to?.toISOString()
 
 	const click = useSingleAndDoubleClick(

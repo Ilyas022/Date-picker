@@ -10,7 +10,7 @@ import {
 } from 'utils/themeGetters'
 
 export const PopUpItem = styled.div`
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: 5;
@@ -24,7 +24,7 @@ export const PopUpItem = styled.div`
 
 export const Container = styled.div`
 	position: relative;
-	padding: 20px;
+	padding: ${(props) => getIndents(props, 3)};
 	background-color: ${(props) => getColors(props).white};
 	width: 50%;
 	height: 70vh;

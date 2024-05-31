@@ -6,6 +6,7 @@ import { getBorders, getBordersRadii, getColors, getIndents, getSizes } from 'ut
 
 export const Container = styled.div`
 	position: relative;
+	width: ${(props) => getSizes(props, 10, -150)};
 `
 
 export const Title = styled.p`

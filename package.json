@@ -2,8 +2,14 @@
   "name": "date-picker-is",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "git@github.com:Ilyas022/date-picker.git",
-  "author": "Ilyas022 <ilya.shchetko@mail.ru>",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Ilyas022/date-picker.git"
+  },
+  "author": {
+    "name": "Ilyas022",
+    "email": "ilya.shchetko@mail.ru"
+  },
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -99,5 +105,9 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/Ilyas022/date-picker/issues"
+  },
+  "homepage": "https://github.com/Ilyas022/date-picker#readme"
 }

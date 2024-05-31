@@ -1,14 +1,11 @@
 import React, { useState } from 'react'
 
-import '../../styles/index.css'
-
 import DateInput from 'components/DateInput'
 import { ErrorBoundary } from 'components/ErrorBoundary'
+import { inputFallbackMsg } from 'src/stories/config'
+import { Container } from 'src/stories/styled'
 
-import { inputFallbackMsg } from './config'
-import { Container } from './styled'
-
-function CalendarContainer() {
+export function CalendarDemo() {
 	const [minDate, setMinDate] = useState<Date | undefined>(new Date(2024, 4, 1))
 	const [maxDate, setMaxDate] = useState<Date | undefined>(new Date(2024, 4, 24))
 	const [rangeFrom, setRangeFrom] = useState<Date | undefined>(new Date(2024, 4, 24))
@@ -61,4 +58,4 @@ function CalendarContainer() {
 	)
 }
 
-export default CalendarContainer
+export default {}

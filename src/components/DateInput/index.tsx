@@ -17,6 +17,7 @@ import {
 	InputItem,
 	Title,
 } from './styled'
+import { DateInputProps } from './types'
 
 function DateInput({
 	date,
@@ -27,16 +28,7 @@ function DateInput({
 	to,
 	title,
 	disableClear = false,
-}: {
-	date: Date | undefined
-	onChange: (date: Date | undefined) => void
-	min?: Date
-	max?: Date
-	from?: Date
-	to?: Date
-	title: string
-	disableClear?: boolean
-}) {
+}: DateInputProps) {
 	const [inputValue, setInputValue] = useState('')
 	const [error, setError] = useState(false)
 	const [calendarOpen, setCalendarOpen] = useState(false)
@@ -98,9 +90,6 @@ function DateInput({
 						value={inputValue}
 						onChange={(e) => {
 							setInputValue(e.target.value.trim())
-						}}
-						onFocus={() => {
-							setCalendarOpen(true)
 						}}
 						onBlur={onBlur}
 					/>

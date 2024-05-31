@@ -1,1 +1,1 @@
-export { default as Calendar } from './components/CalendarContainer'
+export { default as Calendar } from './components/DateInput'

@@ -9,20 +9,16 @@ import {
 	generateCalendarDays,
 	generateCalendarMonths,
 	generateCalendarYears,
+	getDateOnChange,
 	getDateToShow,
 	isInRange,
+	setViewOnChange,
 } from 'utils/getDays'
 
 import { Calendar, CalendarContainer, ClearBtn, DaysGrid, WeekDay, WeekDays } from './styled'
+import { CalendarItemProps } from './types'
 
-function CalendarItem(props: {
-	date?: Date
-	min?: Date
-	max?: Date
-	from?: Date
-	to?: Date
-	setDate: (currDate?: Date) => void
-}) {
+function CalendarItem(props: CalendarItemProps) {
 	const today = new Date()
 	const defaultDate = new Date(today.getFullYear(), today.getMonth(), today.getDate())
 
@@ -53,31 +49,14 @@ function CalendarItem(props: {
 	const handleChangeMonth = (type: keyof typeof ChangeTypes) => {
 		const dayMultiplier = 15
 		const number = type === 'dec' ? -1 : 1
-
 		const newDate = new Date(calendar)
-		if (view === EntityTypes.days) {
-			newDate.setMonth(calendar.getMonth() + number)
-		}
-		if (view === EntityTypes.months) {
-			newDate.setFullYear(calendar.getFullYear() + number)
-		}
-		if (view === EntityTypes.years) {
-			newDate.setFullYear(calendar.getFullYear() + number * dayMultiplier)
-		}
 
+		getDateOnChange(view, newDate, calendar, number, dayMultiplier)
 		setCalendar(newDate)
 	}
 
 	const handleChangeView = () => {
-		if (view === EntityTypes.days) {
-			setView(EntityTypes.months)
-		}
-		if (view === EntityTypes.months) {
-			setView(EntityTypes.years)
-		}
-		if (view === EntityTypes.years) {
-			setView(EntityTypes.days)
-		}
+		setViewOnChange(view, setView)
 	}
 
 	const handleDataChange = (currDate: Date) => {
@@ -110,19 +89,6 @@ function CalendarItem(props: {
 		return weekDaysFromMonday.slice(0, 5)
 	}, [showWeekends, firstDayOfWeek])
 
-	const propsForCalendar = {
-		calendar,
-		data: calendarDays,
-		date,
-		max,
-		min,
-		from,
-		to,
-		view,
-		handleDayClick: handleDataChange,
-		handleYearOrMonthClick,
-	}
-
 	return (
 		<Calendar>
 			<Togglers
@@ -150,7 +116,20 @@ function CalendarItem(props: {
 						view === EntityTypes.months ? 2 : view === EntityTypes.years ? 3 : showWeekends ? 7 : 5
 					}
 				>
-					{calendarDays && <CalendarData {...propsForCalendar} />}
+					{calendarDays && (
+						<CalendarData
+							calendar={calendar}
+							data={calendarDays}
+							date={date}
+							max={max}
+							min={min}
+							from={from}
+							to={to}
+							handleDayClick={handleDataChange}
+							handleYearOrMonthClick={handleYearOrMonthClick}
+							view={view}
+						/>
+					)}
 				</DaysGrid>
 				{from && to && (
 					<ClearBtn type="button" onClick={() => setDate(undefined)}>

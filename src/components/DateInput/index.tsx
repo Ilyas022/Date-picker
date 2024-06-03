@@ -69,7 +69,9 @@ function DateInput({
 
 	const onBlur = () => {
 		updateValue()
-		setCalendarOpen(false)
+	}
+	const onFocus = () => {
+		setCalendarOpen(true)
 	}
 
 	const handleClear = () => {
@@ -91,6 +93,7 @@ function DateInput({
 						onChange={(e) => {
 							setInputValue(e.target.value.trim())
 						}}
+						onFocus={onFocus}
 						onBlur={onBlur}
 					/>
 					<Button type="button" disabled={disableClear} onClick={handleClear}>

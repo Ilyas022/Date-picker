@@ -1,4 +1,4 @@
-import { EntityTypes, FirstDayOfWeekType, WeekStartDay } from 'types/calendarTypes'
+import { EntityTypes, FirstDayOfWeekType, ViewTypes, WeekStartDay } from 'types/calendarTypes'
 
 function isBiggerThanDate(value: Date, date: Date) {
 	if (value.getFullYear() > date.getFullYear()) {
@@ -292,4 +292,37 @@ export const getDateToShow = (date: Date, view: 'years' | 'months' | 'days') => 
 	}
 
 	return undefined
+}
+
+export const getDateOnChange = (
+	view: ViewTypes,
+	date: Date,
+	calendar: Date,
+	number: number,
+	multiplier: number
+) => {
+	if (view === EntityTypes.days) {
+		date.setMonth(calendar.getMonth() + number)
+	}
+	if (view === EntityTypes.months) {
+		date.setFullYear(calendar.getFullYear() + number)
+	}
+	if (view === EntityTypes.years) {
+		date.setFullYear(calendar.getFullYear() + number * multiplier)
+	}
+}
+
+export const setViewOnChange = (
+	view: ViewTypes,
+	setView: (value: React.SetStateAction<ViewTypes>) => void
+) => {
+	if (view === EntityTypes.days) {
+		setView(EntityTypes.months)
+	}
+	if (view === EntityTypes.months) {
+		setView(EntityTypes.years)
+	}
+	if (view === EntityTypes.years) {
+		setView(EntityTypes.days)
+	}
 }

@@ -9,8 +9,6 @@ const config: StorybookConfig = {
 		titlePrefix: 'Calendar'
 	}],
 
-
-
 	addons: [
 		'@storybook/addon-webpack5-compiler-swc',
 		'@storybook/addon-onboarding',

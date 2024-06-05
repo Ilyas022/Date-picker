@@ -5,11 +5,13 @@ import { ErrorBoundary } from 'components/ErrorBoundary'
 import { inputFallbackMsg } from 'src/stories/config'
 import { Container, FallbackMsg } from 'src/stories/styled'
 
+import { StateType } from './types'
+
 export function CalendarDemo() {
-	const [minDate, setMinDate] = useState<Date | undefined>(new Date(2024, 4, 1))
-	const [maxDate, setMaxDate] = useState<Date | undefined>(new Date(2024, 4, 24))
-	const [rangeFrom, setRangeFrom] = useState<Date | undefined>(new Date(2024, 4, 24))
-	const [rangeTo, setRangeTo] = useState<Date | undefined>(new Date(2024, 4, 24))
+	const [minDate, setMinDate] = useState<StateType>(new Date(2024, 4, 1))
+	const [maxDate, setMaxDate] = useState<StateType>(new Date(2024, 4, 24))
+	const [rangeFrom, setRangeFrom] = useState<StateType>(new Date(2024, 4, 24))
+	const [rangeTo, setRangeTo] = useState<StateType>(new Date(2024, 4, 24))
 
 	const handleSelectMinDate = (nextDate?: Date) => {
 		setMinDate(nextDate)
